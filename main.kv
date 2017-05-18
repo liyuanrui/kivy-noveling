@@ -1,0 +1,108 @@
+<Label>:
+    font_name:'droid.ttf'
+<Dutton@Button>:
+    font_name:'droid.ttf'
+    bold:True
+<TextInput>:
+    font_name:'droid.ttf'
+
+<MyLayout>:
+    novelname:novelname
+    noveldir:noveldir
+    novelshow:novelshow
+    noveldown:noveldown
+    orientation:'vertical'
+    padding:(36,36)
+    canvas:
+        Rectangle:
+            pos:self.pos
+            size:self.size
+            source:'back3.jpg'
+    Label:
+        text:'小说名称:'
+        text_size:(self.width,None)
+        halign:'left'
+        valign:'top'
+        size_hint_y:None
+        height:'48dp'
+        
+            
+    TextInput:
+        id:novelname
+        text:''
+        halign:'left'
+        valign:'top'
+        size_hint_y:None
+        height:'48dp'
+        background_normal:'9.png'
+
+        
+        
+        
+    Label:
+        size_hint_y:None
+        height:'4dp'
+        
+    Label:
+        text:'保存路径:'
+        text_size:(self.width,None)
+        halign:'left'
+        valign:'top'
+        size_hint_y:None
+        height:'48dp'
+         
+    TextInput:
+        id:noveldir
+        text:'/sdcard/小说'
+        halign:'left'
+        valign:'top'
+        size_hint_y:None
+        height:'48dp'
+        background_normal:'9.png'
+        
+    Label:
+        size_hint_y:None
+        height:'20dp'
+    
+    BoxLayout:
+        orientation:'horizontal'
+        size_hint_y:None
+        height:'81dp'
+        Dutton:
+            text: '查询'
+            background_normal:'9.png'
+            #background_down:'9.png'
+            on_release:root.checknovel()
+        Dutton:
+            id:noveldown
+            text: '下载'
+            background_normal:'9.png'
+            #background_down:'9.png'
+            on_release:root.start()
+        Dutton:
+            text: '结束'
+            background_normal:'9.png'
+            #background_down:'9.png'
+            on_release:root.stop()
+    
+    Label:
+        size_hint_y:None
+        height:'20dp'
+        
+    ScrollView:
+        
+        Label:
+            id:novelshow
+            text: ''
+            text_size:(self.width,None)
+            halign:'left'
+            valign:'top'
+            size_hint_y:None
+            height:self.texture_size[1]
+    Label:
+        size_hint_y:None
+        height:'20dp'
+        
+        
+        
+    
