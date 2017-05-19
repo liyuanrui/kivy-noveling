@@ -17,7 +17,7 @@
         Rectangle:
             pos:self.pos
             size:self.size
-            source:'back3.jpg'
+            source:'11.jpg'
     Label:
         text:'小说名称:'
         text_size:(self.width,None)
@@ -30,11 +30,10 @@
     TextInput:
         id:novelname
         text:''
-        halign:'left'
-        valign:'top'
         size_hint_y:None
         height:'48dp'
-        background_normal:'9.png'
+        background_normal:'3.png'
+        padding:(10,0.5*(self.height-self.line_height))
 
         
         
@@ -54,11 +53,10 @@
     TextInput:
         id:noveldir
         text:'/sdcard/小说'
-        halign:'left'
-        valign:'top'
         size_hint_y:None
         height:'48dp'
-        background_normal:'9.png'
+        background_normal:'3.png'
+        padding:(10,0.5*(self.height-self.line_height))
         
     Label:
         size_hint_y:None
@@ -70,19 +68,19 @@
         height:'81dp'
         Dutton:
             text: '查询'
-            background_normal:'9.png'
-            #background_down:'9.png'
+            background_normal:'3.png'
+            background_down:'2.png'
             on_release:root.checknovel()
         Dutton:
             id:noveldown
             text: '下载'
-            background_normal:'9.png'
-            #background_down:'9.png'
+            background_normal:'3.png'
+            background_down:'2.png'
             on_release:root.start()
         Dutton:
             text: '结束'
-            background_normal:'9.png'
-            #background_down:'9.png'
+            background_normal:'3.png'
+            background_down:'2.png'
             on_release:root.stop()
     
     Label:

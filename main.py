@@ -6,9 +6,11 @@ import re
 import urllib2
 import urllib
 import thread
+import traceback
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
+from kivy.logger import Logger
 
 hosturl='http://m.biqudao.com'
 
@@ -35,13 +37,14 @@ class MyLayout(BoxLayout):
             if not os.path.exists(downdir):
                 os.makedirs(downdir)
             #全局downdir
-            self.downdir=downdir+'/'+self.novelname.text+'.txt'
+            self.downdir=downdir+'/'+self.novelnametext+'.txt'
             if os.path.exists(self.downdir):
                 self.noveldown.text=u'更新'
             else:
                 self.noveldown.text=u'下载'
         except Exception,e:
             self.novelshow.text=u'查询失败，点多几次一定行\n%s\n'%e
+            Logger.info(traceback.format_exc())
             
     def start(self):
         if self.chapterurl:
@@ -52,7 +55,7 @@ class MyLayout(BoxLayout):
             if not os.path.exists(downdir):
                 os.makedirs(downdir)
             #全局downdir
-            self.downdir=downdir+'/'+self.novelname.text+'.txt'
+            self.downdir=downdir+'/'+self.novelnametext+'.txt'
             self.novelshow.text=self.downdir+'\n'
             thread.start_new_thread(self.newthread,())
         else:
@@ -146,7 +149,7 @@ class MyLayout(BoxLayout):
         titleurl=a[0]
         titlename=a[1]
         #全局书名
-        self.novelname.text=titlename
+        self.novelnametext=titlename.decode('utf-8')
         author=re.findall('作者：</span>.*?<span>(.*?)</span>',r,re.S)[0].strip()
         author=author.replace('<em>','').replace('</em>','')
         updatetime=re.findall('更新时间：.*?<span class="result-game-item-info-tag-title">(.*?)</span>',r,re.S)[0].strip()
