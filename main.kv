@@ -1,3 +1,6 @@
+
+#指定中文字体
+
 <Label>:
     font_name:'droid.ttf'
 <Dutton@Button>:
@@ -6,13 +9,19 @@
 <TextInput>:
     font_name:'droid.ttf'
 
+
+#这里对应py文件MyLayout类
 <MyLayout>:
+    #绑定id，property时间
     novelname:novelname
     noveldir:noveldir
     novelshow:novelshow
     noveldown:noveldown
+    #上下布局
     orientation:'vertical'
+    #内部间隔
     padding:(36,36)
+    #页面背景
     canvas.before:
         Rectangle:
             pos:self.pos
@@ -20,9 +29,11 @@
             source:'11.jpg'
     Label:
         text:'小说名称:'
+        #字体左对齐
         text_size:(self.width,None)
         halign:'left'
         valign:'top'
+        #自定义高度
         size_hint_y:None
         height:'48dp'
         
@@ -32,7 +43,9 @@
         text:''
         size_hint_y:None
         height:'48dp'
+        #输入框图片
         background_normal:'3.png'
+        #垂直居中
         padding:(10,0.5*(self.height-self.line_height))
 
         
@@ -63,13 +76,17 @@
         height:'20dp'
     
     BoxLayout:
+        #左右布局
         orientation:'horizontal'
         size_hint_y:None
         height:'81dp'
         Dutton:
             text: '查询'
+            #按钮正常背景
             background_normal:'3.png'
+            #按钮点击背景
             background_down:'2.png'
+            #按钮松开时间
             on_release:root.checknovel()
         Dutton:
             id:noveldown
@@ -86,9 +103,9 @@
     Label:
         size_hint_y:None
         height:'20dp'
-        
+    
+    #滚动模式
     ScrollView:
-        
         Label:
             id:novelshow
             text: ''

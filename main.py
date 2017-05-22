@@ -16,14 +16,17 @@ from kivy.graphics import *
 hosturl='http://m.biqudao.com'
 
 class MyLayout(BoxLayout):
+    #接收property
     novelname=ObjectProperty()
     noveldir=ObjectProperty()
     novelshow=ObjectProperty()
     noveldown=ObjectProperty()
+    #这3个是判断是否查询完毕/是否停止线程/是否在下载的阀值
     chapterurl=False
     status=False
     download=False
     
+    #查询函数，创建保存路径
     def checknovel(self):
         try:
             self.novelshow.text=''
@@ -46,7 +49,8 @@ class MyLayout(BoxLayout):
         except Exception,e:
             self.novelshow.text=u'查询失败，点多几次一定行\n%s\n'%e
             Logger.info(traceback.format_exc())
-            
+    
+    #开始函数，结束按钮也在这里判断
     def start(self):
         if self.chapterurl:
             if self.noveldown.text != u'结束':
@@ -66,13 +70,14 @@ class MyLayout(BoxLayout):
         else:
             self.novelshow.text=u'请先查询再下载'  
     
+    #结束函数
     def stop(self):
         if self.download:
             self.status=True
         else:
             self.novelshow.text=u'还没开始下载呢\n'
 
-    
+    #线程开始，不阻塞
     def newthread(self):
         try:
             self.action()
@@ -90,7 +95,8 @@ class MyLayout(BoxLayout):
                 self.noveldown.text=u'更新'
             else:
                 self.noveldown.text=u'下载'
-        
+    
+    #爬虫函数
     def action(self):
         self.download=True
         #文本协调区------------
@@ -145,7 +151,7 @@ class MyLayout(BoxLayout):
             self.novelshow.text = warm
              	
         
-        
+    #查询函数
     def searchtitle(self,title):
         try:
             url='http://zhannei.baidu.com/cse/search?s=3654077655350271938&q=%s'%urllib.quote(title.encode('utf-8'))
@@ -167,8 +173,6 @@ class MyLayout(BoxLayout):
         chapterurl=titleurl.replace('www','m')+'all.html'
         return novelnotice,chapterurl
 
-#class Down(object):
-    #def __init__()
 
 
 class MainApp(App):
@@ -179,7 +183,8 @@ class MainApp(App):
 
     def build(self):
         return MyLayout()
-
+    
+    #记住书名和记住背景图的实现
     def on_start(self):
         ff=open('rename.txt')
         titlename=ff.read()
@@ -197,6 +202,7 @@ class MainApp(App):
         with self.root.canvas.before:
             Rectangle(source=ss,pos=self.root.pos,size=self.root.size)
 
+    #切换背景实现
     def stylecc(self):
         fs=open('style.txt')
         ss=fs.read()
@@ -211,6 +217,7 @@ class MainApp(App):
             self.pitures.append(ols)
 
         source=self.pitures.pop(0)
+        #切换背景
         with self.root.canvas.before:
             Rectangle(source=source,pos=self.root.pos,size=self.root.size)
         self.pitures.append(source)
