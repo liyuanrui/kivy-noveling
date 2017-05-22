@@ -13,7 +13,7 @@
     noveldown:noveldown
     orientation:'vertical'
     padding:(36,36)
-    canvas:
+    canvas.before:
         Rectangle:
             pos:self.pos
             size:self.size
@@ -78,10 +78,10 @@
             background_down:'2.png'
             on_release:root.start()
         Dutton:
-            text: '结束'
+            id:zt
+            text: '主题'
             background_normal:'3.png'
             background_down:'2.png'
-            on_release:root.stop()
     
     Label:
         size_hint_y:None

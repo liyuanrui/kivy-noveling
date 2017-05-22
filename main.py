@@ -11,6 +11,7 @@ from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.properties import ObjectProperty
 from kivy.logger import Logger
+from kivy.graphics import *
 
 hosturl='http://m.biqudao.com'
 
@@ -48,16 +49,20 @@ class MyLayout(BoxLayout):
             
     def start(self):
         if self.chapterurl:
-            dirs=self.noveldir.text.split('/')
-            dirs=[i for i in dirs if i]
-            #创建下载目录
-            downdir='/'+'/'.join(dirs)
-            if not os.path.exists(downdir):
-                os.makedirs(downdir)
-            #全局downdir
-            self.downdir=downdir+'/'+self.novelnametext+'.txt'
-            self.novelshow.text=self.downdir+'\n'
-            thread.start_new_thread(self.newthread,())
+            if self.noveldown.text != u'结束':
+                dirs=self.noveldir.text.split('/')
+                dirs=[i for i in dirs if i]
+                #创建下载目录
+                downdir='/'+'/'.join(dirs)
+                if not os.path.exists(downdir):
+                    os.makedirs(downdir)
+                #全局downdir
+                self.downdir=downdir+'/'+self.novelnametext+'.txt'
+                self.novelshow.text=self.downdir+'\n'
+                self.noveldown.text=u'结束'
+                thread.start_new_thread(self.newthread,())
+            else:
+                self.stop()
         else:
             self.novelshow.text=u'请先查询再下载'  
     
@@ -81,6 +86,10 @@ class MyLayout(BoxLayout):
             self.chapterurl=False
             self.download=False
             self.status=False
+            if os.path.exists(self.downdir):
+                self.noveldown.text=u'更新'
+            else:
+                self.noveldown.text=u'下载'
         
     def action(self):
         self.download=True
@@ -163,12 +172,64 @@ class MyLayout(BoxLayout):
 
 
 class MainApp(App):
+    pitures=['11.jpg','22.jpg','33.jpg','44.jpeg']
+    if os.path.exists('/sdcard/noveling'):
+        dirs=[i[0]+'/'+j for i in os.walk('/sdcard/noveling') for j in i[2]]
+        pitures.extend(dirs)
+
     def build(self):
         return MyLayout()
+
     def on_start(self):
         ff=open('rename.txt')
         titlename=ff.read()
         ff.close()
         self.root.ids.novelname.text=titlename.decode('utf-8')
+        self.root.ids.zt.on_press=self.stylecc
+
+        fs=open('style.txt')
+        ss=fs.read()
+        ss=ss.decode('utf-8')
+        fs.close()
+        if not os.path.exists(ss):
+            ss=self.pitures.pop(0)
+            self.pitures.append(ss)
+        with self.root.canvas.before:
+            Rectangle(source=ss,pos=self.root.pos,size=self.root.size)
+
+    def stylecc(self):
+        fs=open('style.txt')
+        ss=fs.read()
+        try:
+            ss=ss.decode('utf-8')
+        except:
+            pass
+        fs.close()
+
+        if os.path.exists(ss):
+            ols=self.pitures.pop(self.pitures.index(ss))
+            self.pitures.append(ols)
+
+        source=self.pitures.pop(0)
+        with self.root.canvas.before:
+            Rectangle(source=source,pos=self.root.pos,size=self.root.size)
+        self.pitures.append(source)
+
+        fs=open('style.txt','w')
+        try:
+            fs.write(source.encode('utf-8'))
+        except:
+            fs.write(source)
+        fs.close()
+        
+
+
+
+
+
+
+
+
+
 
 MainApp().run()
