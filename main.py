@@ -6,6 +6,7 @@ import re
 import urllib2
 import urllib
 import thread
+import time
 import traceback
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
@@ -126,16 +127,14 @@ class MyLayout(BoxLayout):
             h=urllib2.urlopen(url)
             r=h.read()
             h.close()
-            a=re.findall('</a></p>.*?\n<p ',r)[0]
-            a2=a.replace('</a></p>','')
-            a3=a2.replace('<p ','')
-            a4=a3.replace('<br/>','\n')
+            a=re.findall('</script>(.*?)<script type="text/javascript">',r,re.S)[1]
+            a4=a.replace('<br/>','\n')
             a5=a4.replace('&nbsp;',' ')
              
             #写入文本区--------------
-            self.	f.write('%s\n%s\n\n\n\n'%(chapter,a5))
+            self.f.write('%s\n%s\n\n\n\n'%(chapter,a5))
             self.f.flush()
-            warm = chapter.decode('utf-8')+'\n'+self.novelshow.text
+            warm = time.ctime()[11:19]+' '+chapter.decode('utf-8')+'\n'+self.novelshow.text
             warm = warm.split('\n')[:51]
             warm = '\n'.join(warm)
             self.novelshow.text = warm
