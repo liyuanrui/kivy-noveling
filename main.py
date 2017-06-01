@@ -83,6 +83,7 @@ class MyLayout(BoxLayout):
         try:
             self.action()
         except Exception as e:
+            exc=traceback.format_exc()
             warm = u'发生错误，已保存进度，请重试\n%s\n\n'%e +self.novelshow.text
             warm = warm.split('\n')[:51]
             warm = '\n'.join(warm)
@@ -120,13 +121,19 @@ class MyLayout(BoxLayout):
                 chapterlist.append(i)
         
         #获取正文区--------------
-        for i in chapterlist:
+        for i in range(len(chapterlist)):
             if self.status:break
-            url,chapter=i
+            url,chapter=chapterlist[i]
             url=hosturl+'/'+url
-            h=urllib2.urlopen(url)
-            r=h.read()
-            h.close()
+            while True:
+                try:
+                    h=urllib2.urlopen(url,timeout=20)
+                    r=h.read()
+                    h.close()
+                    break
+                except Exception as e:
+                    self.novelshow.text = u'网络异常，将在10秒后重试\n' + self.novelshow.text
+                    time.sleep(10)
             a=re.findall('</script>(.*?)<script type="text/javascript">',r,re.S)[1]
             a4=a.replace('<br/>','\n')
             a5=a4.replace('&nbsp;',' ')
@@ -134,10 +141,17 @@ class MyLayout(BoxLayout):
             #写入文本区--------------
             self.f.write('%s\n%s\n\n\n\n'%(chapter,a5))
             self.f.flush()
-            warm = time.ctime()[11:19]+' '+chapter.decode('utf-8')+'\n'+self.novelshow.text
+            warm = self.novelshow.text
             warm = warm.split('\n')[:51]
+            try:warm.pop(0)
+            except:pass
+            warm = [j for j in warm if j]
             warm = '\n'.join(warm)
-            self.novelshow.text = warm
+            warm = time.ctime()[11:19]+' '+chapter.decode('utf-8')+'\n'+warm
+            
+            percent=float(i)/len(chapterlist)*100
+            percent=u'下载进度 %.2f'%percent+u'%'
+            self.novelshow.text = percent+'\n\n'+warm
         if self.status:
             warm = u'已结束，返回键退出\n\n'+self.novelshow.text
             warm = warm.split('\n')[:51]
@@ -156,7 +170,7 @@ class MyLayout(BoxLayout):
             url='http://zhannei.baidu.com/cse/search?s=3654077655350271938&q=%s'%urllib.quote(title.encode('utf-8'))
         except:
             url='http://zhannei.baidu.com/cse/search?s=3654077655350271938&q=%s'%urllib.quote(title)
-        h=urllib2.urlopen(url)
+        h=urllib2.urlopen(url,timeout=20)
         r=h.read()
         h.close()
         a=re.findall('<a cpos="title" href="(.*?)" title="(.*?)" class="result-game-item-title-link" target="_blank">',r)[0]
