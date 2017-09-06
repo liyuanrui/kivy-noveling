@@ -1,0 +1,79 @@
+#: import MDTextField kivymd.textfields.MDTextField
+#: import MDRaisedButton kivymd.button.MDRaisedButton
+#: import MDLabel kivymd.label.MDLabel 
+
+
+#这里对应py文件MyLayout类
+<MyLayout>:
+    #绑定id，property事件
+    novelname:novelname
+    author:author
+    noveldir:noveldir
+    novelshow:novelshow
+    noveldown:noveldown
+    #上下布局
+    orientation:'vertical'
+    #内部间隔
+    padding:(36,36)
+    
+    MDTextField:
+        id:novelname
+        hint_text:'小说名(必填)'
+        size_hint_x:1
+
+    MDTextField:
+        id:author
+        hint_text:'作者名(必填)'
+        size_hint_x:1
+
+         
+    MDTextField:
+        id:noveldir
+        hint_text:'下载路径'
+        text:'/sdcard/小说'
+        size_hint_x:1
+        
+    Label:
+        size_hint_y:None
+        height:'9dp'
+    BoxLayout:
+        orientation:'horizontal'
+        size_hint:1,0.2
+        MDRaisedButton:
+            size_hint:1,1
+            text: '查询'
+            on_release:
+                if not novelname.text:novelshow.text='小说名不能为空'
+                elif not author.text:novelshow.text='作者名不能为空'
+                else:root.checknovel()
+        Label:
+            size_hint_x:0.03
+        MDRaisedButton:
+            id:noveldown
+            size_hint:1,1
+            text: '下载'
+            on_release:root.start()
+        
+    Label:
+        size_hint:1,0.06
+       
+    #滚动模式
+    ScrollView:
+        MDLabel:
+            id:novelshow
+            text: ''
+            text_size:(self.width,None)
+            halign:'left'
+            valign:'top'
+            size_hint_y:None
+            height:self.texture_size[1]
+            color:1,1,1,1
+            
+    #最后这个的Label作用很奇妙
+    Label:
+        size_hint_y:None
+        height:'20dp'
+        
+        
+        
+    

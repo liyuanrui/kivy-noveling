@@ -1,0 +1,16 @@
+--dist_name py2dist
+--android_api 19
+--sdk_dir /home/kivydev/andr/android-sdk-linux
+--ndk_dir /home/kivydev/andr/android-ndk-r10e
+
+
+--requirements python2,kivy==master,git+https://gitlab.com/kivymd/KivyMD.git
+--private . 
+--package cool.lr.noveld
+--name novelD
+--version 2.2
+--bootstrap sdl2 
+--permission INTERNET WRITE_EXTERNAL_STORAGE WAKE_LOCK
+--wakelock
+
+
